@@ -1,6 +1,9 @@
+var randomVariable = require("dotenv").config();
 var request = require('request');
 var moment = require('moment');
 var Spotify = require('node-spotify-api');
+var keys = require("./keys.js");
+var fs = require('fs');
 
 
 if (process.argv[2] === 'concert-this') {
@@ -25,7 +28,15 @@ if (process.argv[2] === 'concert-this') {
 
 } else if (process.argv[2] === 'movie-this') {
   //OMDB 
-  var movieTitle = process.argv[3].trim();
+  var movieTitle = process.argv[3];
+
+  if (movieTitle){
+    movieTitle = movieTitle.trim();
+  } else{
+    movieTitle = 'Mr.Nobody';
+  };
+
+
   moveiTitle = movieTitle.replace(' ', '+');
   request('http://www.omdbapi.com/?t=' + movieTitle + '&apikey=38c78df7&', function (error, response, body) {
     if (error) {
@@ -43,29 +54,75 @@ if (process.argv[2] === 'concert-this') {
   });
 
 
-} else if (process.argv[2] === 'spotify-this-song') {
+} else if (process.argv[2] === 'spotify-this-song' || process.argv[2] ==='do-what-it-says') {
   //Spotify
-  var spotify = new Spotify({
-    id: '78ad70a9c26e4dc788787f51173945ad',
-    secret: 'd712dc33c72c4f428d84c06ba0dd5185'
-  });
-  var song = process.argv.slice(3).join(' ');
+  var spotify = new Spotify(keys.spotify);
 
-  spotify.search({ type: 'track', query: song, limit: 1 }, function (err, data) {
+  if (process.argv[2] === 'spotify-this-song'){
+    var song = process.argv.slice(3).join(' ');
+  } else if (process.argv[2] ==='do-what-it-says'){
+    var fileName = 'random.txt';
+    fs.readFile(fileName, 'utf8', function(err, data){
+      if(err){
+        console.log(err);
+      }else {
+        var test = data.trim();
+        var ourNewArray = test.split(',');
+        // var commandFromTxtFile = ourNewArray[0];
+        var song = ourNewArray[1];
+       return song;
+      };
+    });
+
+  }
+  
+
+console.log(song)
+
+
+
+
+
+
+  if (song) {
+    song = song;
+  } else {
+    song = 'The Sign';
+  };
+
+
+
+  spotify.search({ type: 'track', query: song, limit: 20 }, function (err, data) {
     if (err) {
       return console.log('Error occurred: ' + err);
     }
-    console.log('Artist: ' + data.tracks.items[0].artists[0].name);
-    console.log('Album: ' + data.tracks.items[0].album.name);
-    console.log('Song: ' + data.tracks.items[0].name);
-    var temp = data.tracks.items[0].preview_url
+
+    var temp1 = data.tracks.items
+    var lowerCaseSongTitleFromSpotify = '';
+    for (var i in temp1) {
+      lowerCaseSongTitleFromSpotify = temp1[i].name;
+      if (lowerCaseSongTitleFromSpotify.toLowerCase() === song.toLowerCase()) {
+        var num = i;
+        break;
+      }
+    };
+
+    console.log('Artist: ' + data.tracks.items[num].artists[0].name);
+    console.log('Album: ' + data.tracks.items[num].album.name);
+    console.log('Song: ' + data.tracks.items[num].name);
+    var temp = data.tracks.items[num].preview_url
     if (temp) {
-      console.log('Sample URL: ' + data.tracks.items[0].preview_url);
+      console.log('Sample URL: ' + data.tracks.items[num].preview_url);
     } else {
       console.log('Sample URL not available on Spotify!');
     }
-
   });
 };
+
+
+
+
+
+
 
 
