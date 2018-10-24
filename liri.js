@@ -6,6 +6,7 @@ var keys = require("./keys.js");
 var fs = require('fs');
 
 
+
 if (process.argv[2] === 'concert-this') {
   //Bands In Town
   request('https://rest.bandsintown.com/artists/' + process.argv[3] + '/events?app_id=codingbootcamp', function (error, response, body) {
@@ -19,8 +20,8 @@ if (process.argv[2] === 'concert-this') {
       gigNum = parseFloat(i) + 1
       console.log('Gig #' + gigNum)
       console.log('Vaneu Name: ' + bandsInTownData[i].venue.name);
-      temp = bandsInTownData[i].venue.datetime
-      console.log('Date: ' + moment(temp).format('DD/MM/YYYY'));
+      temp = bandsInTownData[i].datetime;
+      console.log('date: ' + moment(temp).format('DD/MM/YYYY'));
       console.log('City/Country: ' + bandsInTownData[i].venue.city + ', ' + bandsInTownData[i].venue.country)
       console.log('Location : ' + bandsInTownData[i].venue.latitude + ', ' + bandsInTownData[i].venue.longitude);
     };
@@ -30,12 +31,11 @@ if (process.argv[2] === 'concert-this') {
   //OMDB 
   var movieTitle = process.argv[3];
 
-  if (movieTitle){
+  if (movieTitle) {
     movieTitle = movieTitle.trim();
-  } else{
+  } else {
     movieTitle = 'Mr.Nobody';
   };
-
 
   moveiTitle = movieTitle.replace(' ', '+');
   request('http://www.omdbapi.com/?t=' + movieTitle + '&apikey=38c78df7&', function (error, response, body) {
@@ -54,69 +54,82 @@ if (process.argv[2] === 'concert-this') {
   });
 
 
-} else if (process.argv[2] === 'spotify-this-song' || process.argv[2] ==='do-what-it-says') {
+} else if (process.argv[2] === 'spotify-this-song' || process.argv[2] === 'do-what-it-says') {
   //Spotify
   var spotify = new Spotify(keys.spotify);
-
-  if (process.argv[2] === 'spotify-this-song'){
+  var song;
+  if (process.argv[2] === 'spotify-this-song') {
     var song = process.argv.slice(3).join(' ');
-  } else if (process.argv[2] ==='do-what-it-says'){
-    var fileName = 'random.txt';
-    fs.readFile(fileName, 'utf8', function(err, data){
-      if(err){
-        console.log(err);
-      }else {
-        var test = data.trim();
-        var ourNewArray = test.split(',');
-        // var commandFromTxtFile = ourNewArray[0];
-        var song = ourNewArray[1];
-       return song;
-      };
-    });
-
-  }
-  
-
-console.log(song)
-
-
-
-
-
-
-  if (song) {
-    song = song;
-  } else {
-    song = 'The Sign';
-  };
-
-
-
-  spotify.search({ type: 'track', query: song, limit: 20 }, function (err, data) {
-    if (err) {
-      return console.log('Error occurred: ' + err);
-    }
-
-    var temp1 = data.tracks.items
-    var lowerCaseSongTitleFromSpotify = '';
-    for (var i in temp1) {
-      lowerCaseSongTitleFromSpotify = temp1[i].name;
-      if (lowerCaseSongTitleFromSpotify.toLowerCase() === song.toLowerCase()) {
-        var num = i;
-        break;
-      }
+    if (song) {
+      song = song;
+    } else {
+      song = 'The Sign';
     };
 
-    console.log('Artist: ' + data.tracks.items[num].artists[0].name);
-    console.log('Album: ' + data.tracks.items[num].album.name);
-    console.log('Song: ' + data.tracks.items[num].name);
-    var temp = data.tracks.items[num].preview_url
-    if (temp) {
-      console.log('Sample URL: ' + data.tracks.items[num].preview_url);
-    } else {
-      console.log('Sample URL not available on Spotify!');
-    }
-  });
+    spotify.search({ type: 'track', query: song, limit: 20 }, function (err, data) {
+      if (err) {
+        return console.log('Error occurred: ' + err);
+      }
+
+      var temp1 = data.tracks.items
+      var lowerCaseSongTitleFromSpotify = '';
+      for (var i in temp1) {
+        lowerCaseSongTitleFromSpotify = temp1[i].name;
+        if (lowerCaseSongTitleFromSpotify.toLowerCase() === song.toLowerCase()) {
+          var num = i;
+          break;
+        }
+      };
+
+      console.log('Artist: ' + data.tracks.items[num].artists[0].name);
+      console.log('Album: ' + data.tracks.items[num].album.name);
+      console.log('Song: ' + data.tracks.items[num].name);
+      var temp = data.tracks.items[num].preview_url
+      if (temp) {
+        console.log('Sample URL: ' + data.tracks.items[num].preview_url);
+      } else {
+        console.log('Sample URL not available on Spotify!');
+      }
+    });
+
+  } else if (process.argv[2] === 'do-what-it-says') {
+    var fileName = 'random.txt';
+    fs.readFile(fileName, 'utf8', function (err, data) {
+      if (err) {
+        console.log(err);
+      } else {
+        var test = data.trim();
+        var ourNewArray = test.split(',');
+        song = ourNewArray[1];
+        console.log('setting song variable from the ourNewArray[1]' + song)
+        spotify.search({ type: 'track', query: song, limit: 20 }, function (err, data) {
+          
+          if (err) {
+            return console.log('Error occurred: ' + err);
+          }
+
+          var temp1 = data.tracks.items
+          var lowerCaseSongTitleFromSpotify = '';
+          for (var i in temp1) {
+            lowerCaseSongTitleFromSpotify = temp1[i].name;
+            if (lowerCaseSongTitleFromSpotify.toLowerCase() === song.toLowerCase()) {
+              var num = i;
+              break;
+            }
+          };
+          console.log('Artist: ' + data.tracks.items[num].artists[0].name);
+          console.log('Album: ' + data.tracks.items[num].album.name);
+          console.log('Song: ' + data.tracks.items[num].name);
+          var temp = data.tracks.items[num].preview_url
+          if (temp) {
+            console.log('Sample URL: ' + data.tracks.items[num].preview_url);
+          } else {
+            console.log('Sample URL not available on Spotify!');
+          }
+        });
+      };
+    });
+  }
 };
 
 
