@@ -20,5 +20,12 @@ the app will use this file in order to retrieve the necessary credentials.
 
 3. launch gitbash, navigate to your directory and type one of 3 below commands:
 3-A: node movie-this <name of movie> (please note that if name of movie is left blank info regarding a default/pre-determined film will be provided)
+3-A-1: sample video can be found at *https://github.com/michaelfbagheri/Liri-node-app/blob/master/videoCapture/movie-this.mp4*.
+  
 3-B: node spotify-this-song <song name> (please note that if song name is left blank info regarding a default/pre-determined song will be provided, NOTE: if you don't want to see info regarding some terrible 90's music song's PLEASE fill in your favorit song, DON'T RISK IT!)
+3-B-1: sample video can be found at *https://github.com/michaelfbagheri/Liri-node-app/blob/master/videoCapture/spotify-this-song.mp4*
+  
 3-C: node concert-this <artist name> (assuming the provided artist is going on tour and they have that infomration in the Bands In Town database, you'll get all concert listings along with date/town/venue-name/Long/Lat)
+3-C-1: sample video can be found at *"https://github.com/michaelfbagheri/Liri-node-app/blob/master/videoCapture/concert-this.mp4"*
+
+Enjoy! 
