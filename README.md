@@ -1,6 +1,8 @@
 # Liri
+https://github.com/michaelfbagheri/Liri-node-app
 
-Liri is an app designed to provide you entertainemetn related facts in the categories of Movies, Songs, and up coming concert listings.
+
+Liri is an app designed to provide you entertainment related facts in the categories of Movies, Songs, and upcoming concert listings.
 
 Users can retrieve data from one of 3 databases, OMDB for movies, Spotify for song related info, and Bands In Town for upcoming concert listings. 
 
@@ -25,7 +27,7 @@ the app will use this file in order to retrieve the necessary credentials.
 3-B: node spotify-this-song <song name> (please note that if song name is left blank info regarding a default/pre-determined song will be provided, NOTE: if you don't want to see info regarding some terrible 90's music song's PLEASE fill in your favorit song, DON'T RISK IT!)
 3-B-1: sample video can be found at *https://github.com/michaelfbagheri/Liri-node-app/blob/master/videoCapture/spotify-this-song.mp4*
   
-3-C: node concert-this <artist name> (assuming the provided artist is going on tour and they have that infomration in the Bands In Town database, you'll get all concert listings along with date/town/venue-name/Long/Lat)
+3-C: node concert-this <artist name> (assuming the provided artist is going on tour and they have that information in the Bands In Town database, you'll get all concert listings along with date/town/venue-name/Long/Lat)
 3-C-1: sample video can be found at *"https://github.com/michaelfbagheri/Liri-node-app/blob/master/videoCapture/concert-this.mp4"*
 
-Enjoy! 
+Enjoy!
